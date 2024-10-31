@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 
 /**
  *
@@ -340,38 +341,73 @@ public class Pantalla extends javax.swing.JPanel {
     }                                            
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
+        String name = NameAutor.getText();
+        String pais = IdPais.getText();
+        String convida = ConVida.getText();
+        Date cumple = Date.valueOf(Cumple.getText());
+        Date publi = Date.valueOf(PrimeraPublicacion.getText());
+        int cali = Integer.parseInt(calificacion.getText());
+        int cantP = Integer.parseInt(cantPublicaciones.getText());
+        
+        if (validarDatos(new Object[]{name,pais,convida, cumple, publi, cantP, cali})){
+               //insertar en la base de datos 
+               int ID = AutorAccess.insertAutor(name,pais,convida, cumple, publi, cantP, cali); //Llamada al método que ejecuta el PA 
+               JOptionPane.showMessageDialog(this, "ID generado: " + ID + " para el Autor de nombre: "+ name);
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "No deben haber campos en blanco.");
+        }
+        
+        //limpiiar textfield
+        IdAutor.setText("");
+        NameAutor.setText("");
+        IdPais.setText("");
+        Cumple.setText("");
+        ConVida.setText("");
+        PrimeraPublicacion.setText("");
+        cantPublicaciones.setText("");
+        calificacion.setText("");
     }                                         
 
     private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        // TODO add your handling code here:
+        Manual help = new Manual();
+        help.setVisible(true);
     }                                     
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {
-    ResultSet rs = AutorAccess.getAutores(); //Llamada al método que ejecuta el PA 
-    DefaultTableModel model = (DefaultTableModel) Tabla.getModel();
-    model.setRowCount(0); //Limpia la tabla antes de cargar nuevos datos
+        ResultSet rs = AutorAccess.getAutores(); //Llamada al método que ejecuta el PA 
+        DefaultTableModel model = (DefaultTableModel) Tabla.getModel();
+        model.setRowCount(0); //Limpia la tabla antes de cargar nuevos datos
 
-    try {
-        //Itera a través del ResultSet y llena la tabla
-        while (rs != null && rs.next()) {
-            Object[] row = {
-                rs.getString("idAutor"),              //ID del autor
-                rs.getString("nombre"),               //Nombre del autor
-                rs.getString("idPais"),               //País del autor
-                rs.getString("vivo"),                 //Estado de vida (vivo o no)
-                rs.getDate("fechaNacimiento"),        //Fecha de nacimiento
-                rs.getDate("primeraPublicacion"),     //Fecha de primera publicación
-                rs.getInt("publicaciones"),           //Cantidad de publicaciones
-                rs.getDouble("calificacion")          //Calificación
-            };
-            model.addRow(row); //Agrega la fila al modelo de la tabla
+        try {
+            //Itera a través del ResultSet y llena la tabla
+            while (rs != null && rs.next()) {
+                Object[] row = {
+                    rs.getString("idAutor"),              //ID del autor
+                    rs.getString("nombre"),               //Nombre del autor
+                    rs.getString("idPais"),               //País del autor
+                    rs.getString("vivo"),                 //Estado de vida (vivo o no)
+                    rs.getDate("fechaNacimiento"),        //Fecha de nacimiento
+                    rs.getDate("primeraPublicacion"),     //Fecha de primera publicación
+                    rs.getInt("publicaciones"),           //Cantidad de publicaciones
+                    rs.getDouble("calificacion")          //Calificación
+                };
+                model.addRow(row); //Agrega la fila al modelo de la tabla
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar los datos de los autores.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al cargar los datos de los autores.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
-
+    
+    private boolean validarDatos(Object[] datos) {
+        for (Object dato : datos) {
+            // Verifica si el elemento es null o es una cadena vacía
+            if (dato == null || (dato instanceof String && ((String) dato).trim().isEmpty())) {
+                return false; // Retorna false si encuentra un valor inválido
+            }
+        }
+        return true; // Retorna true si todos los elementos están completos
+    } 
 
     // Variables declaration - do not modify                     
     private javax.swing.JTextField ConVida;
