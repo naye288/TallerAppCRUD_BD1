@@ -1,6 +1,12 @@
 package com.mycompany.TallerAppCRUD_BD1;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -157,7 +163,7 @@ public class Pantalla extends javax.swing.JPanel {
             }
         });
 
-        btnListar.setText("Buscar Autor");
+        btnListar.setText("Listar Autor");
 
         btnDelete.setText("Eliminar Autor");
 
@@ -169,8 +175,29 @@ public class Pantalla extends javax.swing.JPanel {
                 btnHelpActionPerformed(evt);
             }
         });
-
         
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarActionPerformed(evt);
+            }
+        });
+        
+        Tabla.addMouseListener(new MouseAdapter() {
+        public void mouseClicked(MouseEvent evt) {
+            int selectedRow = Tabla.getSelectedRow(); // Obtiene la fila seleccionada
+            if (selectedRow != -1) {
+                // Rellena los campos con los datos de la fila seleccionada
+                IdAutor.setText(Tabla.getValueAt(selectedRow, 0).toString());
+                NameAutor.setText(Tabla.getValueAt(selectedRow, 1).toString());
+                IdPais.setText(Tabla.getValueAt(selectedRow, 2).toString());
+                ConVida.setText(Tabla.getValueAt(selectedRow, 3).toString());
+                Cumple.setText(Tabla.getValueAt(selectedRow, 4).toString());
+                PrimeraPublicacion.setText(Tabla.getValueAt(selectedRow, 5).toString());
+                cantPublicaciones.setText(Tabla.getValueAt(selectedRow, 6).toString());
+                calificacion.setText(Tabla.getValueAt(selectedRow, 7).toString());
+            }
+        }
+    });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -319,6 +346,31 @@ public class Pantalla extends javax.swing.JPanel {
     private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {                                        
         // TODO add your handling code here:
     }                                     
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {
+    ResultSet rs = AutorAccess.getAutores(); // Llamada al método que ejecuta el PA en SQL Server
+    DefaultTableModel model = (DefaultTableModel) Tabla.getModel();
+    model.setRowCount(0); // Limpia la tabla antes de cargar nuevos datos
+
+    try {
+        // Itera a través del ResultSet y llena la tabla
+        while (rs != null && rs.next()) {
+            Object[] row = {
+                rs.getString("idAutor"),              // ID del autor
+                rs.getString("nombre"),               // Nombre del autor
+                rs.getString("idPais"),               // País del autor
+                rs.getString("vivo"),                 // Estado de vida (vivo o no)
+                rs.getDate("fechaNacimiento"),        // Fecha de nacimiento
+                rs.getDate("primeraPublicacion"),     // Fecha de primera publicación
+                rs.getInt("publicaciones"),           // Cantidad de publicaciones
+                rs.getDouble("calificacion")          // Calificación
+            };
+            model.addRow(row); // Agrega la fila al modelo de la tabla
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al cargar los datos de los autores.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
 
     // Variables declaration - do not modify                     
