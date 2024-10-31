@@ -184,9 +184,9 @@ public class Pantalla extends javax.swing.JPanel {
         
         Tabla.addMouseListener(new MouseAdapter() {
         public void mouseClicked(MouseEvent evt) {
-            int selectedRow = Tabla.getSelectedRow(); // Obtiene la fila seleccionada
+            int selectedRow = Tabla.getSelectedRow(); //Obtiene la fila seleccionada
             if (selectedRow != -1) {
-                // Rellena los campos con los datos de la fila seleccionada
+                //Rellena los campos con los datos de la fila seleccionada
                 IdAutor.setText(Tabla.getValueAt(selectedRow, 0).toString());
                 NameAutor.setText(Tabla.getValueAt(selectedRow, 1).toString());
                 IdPais.setText(Tabla.getValueAt(selectedRow, 2).toString());
@@ -347,24 +347,24 @@ public class Pantalla extends javax.swing.JPanel {
         // TODO add your handling code here:
     }                                     
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {
-    ResultSet rs = AutorAccess.getAutores(); // Llamada al método que ejecuta el PA en SQL Server
+    ResultSet rs = AutorAccess.getAutores(); //Llamada al método que ejecuta el PA 
     DefaultTableModel model = (DefaultTableModel) Tabla.getModel();
-    model.setRowCount(0); // Limpia la tabla antes de cargar nuevos datos
+    model.setRowCount(0); //Limpia la tabla antes de cargar nuevos datos
 
     try {
-        // Itera a través del ResultSet y llena la tabla
+        //Itera a través del ResultSet y llena la tabla
         while (rs != null && rs.next()) {
             Object[] row = {
-                rs.getString("idAutor"),              // ID del autor
-                rs.getString("nombre"),               // Nombre del autor
-                rs.getString("idPais"),               // País del autor
-                rs.getString("vivo"),                 // Estado de vida (vivo o no)
-                rs.getDate("fechaNacimiento"),        // Fecha de nacimiento
-                rs.getDate("primeraPublicacion"),     // Fecha de primera publicación
-                rs.getInt("publicaciones"),           // Cantidad de publicaciones
-                rs.getDouble("calificacion")          // Calificación
+                rs.getString("idAutor"),              //ID del autor
+                rs.getString("nombre"),               //Nombre del autor
+                rs.getString("idPais"),               //País del autor
+                rs.getString("vivo"),                 //Estado de vida (vivo o no)
+                rs.getDate("fechaNacimiento"),        //Fecha de nacimiento
+                rs.getDate("primeraPublicacion"),     //Fecha de primera publicación
+                rs.getInt("publicaciones"),           //Cantidad de publicaciones
+                rs.getDouble("calificacion")          //Calificación
             };
-            model.addRow(row); // Agrega la fila al modelo de la tabla
+            model.addRow(row); //Agrega la fila al modelo de la tabla
         }
     } catch (SQLException e) {
         e.printStackTrace();

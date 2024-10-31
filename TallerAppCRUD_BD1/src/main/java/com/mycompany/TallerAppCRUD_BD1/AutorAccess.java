@@ -14,13 +14,13 @@ import java.sql.Statement;
  */
 public class AutorAccess {
 
-    // Método para obtener todos los autores utilizando EXEC
+    //Método para obtener todos los autores 
     public static ResultSet getAutores() {
-        String query = "EXEC GetAutores"; // Llamada al procedimiento almacenado con EXEC
+        String query = "EXEC GetAutores"; //Llamada al procedimiento almacenado 
         try {
             Connection connection = SQLConnection.getConnection();
             Statement statement = connection.createStatement();
-            return statement.executeQuery(query); // Ejecuta la consulta y obtiene el ResultSet
+            return statement.executeQuery(query); //Ejecuta la consulta y obtiene el ResultSet
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
