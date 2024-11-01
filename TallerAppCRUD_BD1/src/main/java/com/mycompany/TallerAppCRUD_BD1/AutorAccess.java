@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -61,6 +62,33 @@ public class AutorAccess {
             return null;
         }
     }
+
+    //Método para modificar la tabla de autores
+    public void ModificarAlumnos(String idAutor, String name, String pais, String convida, Date cumple, Date publi, int cantP, int cali){
+        SQLConnection objetoConexion = new SQLConnection();
+        String consulta = "UPDATE Autores SET Autores.nombre = ?, Autores.idPais = ?, Autores.vivo = ?, Autores.fechaNacimiento = ?, Autores.primeraPublicacion = ?, Autores.publicaciones = ?, Autores.calificacion = ? WHERE Autores.idAutor = ?";
+            
+        try (Connection connection = SQLConnection.getConnection()) {
+            CallableStatement cs = connection.prepareCall(consulta);    
+                
+            cs.setString(1, name); 
+            cs.setString(2, pais); 
+            cs.setString(3, convida);  
+            cs.setDate(4, cumple);  
+            cs.setDate(5, publi);  
+            cs.setInt(6, cantP); 
+            cs.setInt(7, cali);
+            cs.setString(8, idAutor);
+                
+            cs.execute();
+                
+            JOptionPane.showMessageDialog(null, "Se modifico correctamente el alumno");
+    
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error de modificacion, error:" + e.toString());
+        }
+                
+    }
     
     public static boolean deleteAutores(int id) {
         try (Connection connection = SQLConnection.getConnection()){
@@ -80,4 +108,3 @@ public class AutorAccess {
         return false; //eliminacion fallida
     }
 }
-
