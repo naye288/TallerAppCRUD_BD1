@@ -6,6 +6,7 @@ package com.mycompany.TallerAppCRUD_BD1;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -59,6 +60,24 @@ public class AutorAccess {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    public static boolean deleteAutores(int id) {
+        try (Connection connection = SQLConnection.getConnection()){
+            String sql = "Exec deleteAutores ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            
+            // Establecer los valores de los parámetros de entrada
+            statement.setInt(1, id);
+ 
+            // Ejecutar el procedimiento almacenado
+            statement.execute();
+            connection.close();
+            return true; //se logra la eliminacion
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false; //eliminacion fallida
     }
 }
 
