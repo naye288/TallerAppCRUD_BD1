@@ -1,3 +1,9 @@
+/*
+Sebastián Andrés Muñoz Morera 2023090681
+Nayely Francini Chavarría Guevara 2021093564
+Felipe Javier Murillo Chaves 2023083005
+*/
+
 package com.mycompany.TallerAppCRUD_BD1;
 
 import javax.swing.JOptionPane;
